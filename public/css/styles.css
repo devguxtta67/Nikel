@@ -96,3 +96,24 @@ header{
 .menu{
     margin-right: 20px;
 }
+
+.alert-saldo-negativo {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    background-color: black;
+    color: white;
+    border: none;
+}
+
+.alert-saldo-negativo .btn {
+    background-color: blue;
+    color: white;
+    border: none;
+}
+
+.alert-saldo-negativo .btn:hover {
+    background-color: darkblue;
+}
+

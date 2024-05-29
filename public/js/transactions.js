@@ -22,6 +22,11 @@ document.getElementById("transaction-form").addEventListener("submit", function(
         return;
     }
 
+    if (type === "2" && value > getCurrentBalance()) {
+        document.querySelector('.alert-saldo-negativo').style.display = 'block';
+        return;
+    }
+
     data.transactions.unshift({
         value: value, 
         type: type, 
@@ -37,6 +42,22 @@ document.getElementById("transaction-form").addEventListener("submit", function(
     getTransactions();
 });
 
+document.getElementById("confirmar-saldo-negativo").addEventListener("click", function() {
+    document.querySelector('.alert-saldo-negativo').style.display = 'none';
+});
+
+function getCurrentBalance() {
+    let total = 0;
+    data.transactions.forEach(transaction => {
+        if (transaction.type === "1") {
+            total += transaction.value;
+        } else if (transaction.type === "2") {
+            total -= transaction.value;
+        }
+    });
+    return total;
+}
+
 function saveData(data) {
     localStorage.setItem(logged, JSON.stringify(data));
 }
@@ -47,7 +68,7 @@ function getTransactions() {
 
     if(transactions.length){
         transactions.forEach((item) =>{
-            let type ="Entradas";
+            let type ="Entrada";
 
             if(item.type === "2"){
                 type = "Saída";
@@ -80,8 +101,6 @@ function checkLogged(){
     }
 
     getTransactions();
-
-    
 }
 
 function logout(){
@@ -89,7 +108,6 @@ function logout(){
     localStorage.removeItem("session");
 
     window.location.href = "index.html";
-
 }
 
 checkLogged();

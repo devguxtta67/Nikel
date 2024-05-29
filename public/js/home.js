@@ -11,14 +11,20 @@ document.getElementById("transactions-button").addEventListener("click", functio
     window.location.href = "transactions.html";
 });
 
-
 // ADICIONAR LANÇAMENTO
 document.getElementById("transaction-form").addEventListener("submit", function(e){
     e.preventDefault();
+    
     const value = parseFloat(document.getElementById("value-input").value);
     const description = document.getElementById("description-input").value;
     const date = document.getElementById("date-input").value;
     const type = document.querySelector('input[name="type-input"]:checked').value;
+    const saldoAtual = getCurrentBalance();
+
+    if (type === "2" && value > saldoAtual) {
+        document.querySelector('.alert-saldo-negativo').style.display = 'block';
+        return;
+    }
 
     data.transactions.unshift({
         value: value, type: type, description: description, date: date
@@ -32,6 +38,10 @@ document.getElementById("transaction-form").addEventListener("submit", function(
     getCashIn();
     getCashOut();
     getTotal();
+});
+
+document.getElementById("confirmar-saldo-negativo").addEventListener("click", function() {
+    document.querySelector('.alert-saldo-negativo').style.display = 'none';
 });
 
 checkLogged();
@@ -138,59 +148,27 @@ function getTotal(){
     const transactions = data.transactions;
     let total = 0;
     transactions.forEach((item) => {
-        if(item.type ==="1"){
-            total+= item.value;
-        } else{
+        if(item.type === "1"){
+            total += item.value;
+        } else {
             total -= item.value;
         }
- }
-);
+    });
     document.getElementById("total").innerHTML = `R$ ${total.toFixed(2)}`;
+}
+
+function getCurrentBalance() {
+    let total = 0;
+    data.transactions.forEach(transaction => {
+        if (transaction.type === "1") {
+            total += transaction.value;
+        } else if (transaction.type === "2") {
+            total -= transaction.value;
+        }
+    });
+    return total;
 }
 
 function saveData(data) {
     localStorage.setItem(logged, JSON.stringify(data));
 }
-
-document.getElementById('transaction-form').addEventListener('submit', function(event) {
-    // Previne o envio do formulário para verificar o saldo
-    event.preventDefault();
-
-    // Calcula o saldo após adicionar a despesa
-    let value = parseFloat(document.getElementById('value-input').value);
-    let type = parseInt(document.querySelector('input[name="type-input"]:checked').value);
-    let saldoAtual = parseFloat(document.getElementById('total').innerText.replace('R$ ', '').replace(',', '.'));
-
-    if (type === 2 && value > saldoAtual) {
-        // Exibe o alerta se o saldo ficar negativo
-        document.querySelector('.alert-saldo-negativo').style.display = 'block';
-    } else {
-        // Submete o formulário se o saldo não for negativo
-        this.submit();
-    }
-});
-
-// Evento para o envio do formulário
-document.getElementById('transaction-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o envio do formulário para verificar o saldo
-
-    let value = parseFloat(document.getElementById('value-input').value);
-    let type = parseInt(document.querySelector('input[name="type-input"]:checked').value);
-    let saldoAtual = parseFloat(document.getElementById('total').innerText.replace('R$ ', '').replace(',', '.'));
-
-    if (type === 2 && value > saldoAtual) {
-        // Exibe o alerta se o saldo ficar negativo
-        document.querySelector('.alert-saldo-negativo').style.display = 'block';
-    } else {
-        // Submete o formulário se o saldo não for negativo
-        this.submit();
-    }
-});
-
-// Evento para o botão de confirmar saldo negativo
-document.getElementById('confirmar-saldo-negativo').addEventListener('click', function() {
-    // Submete o formulário se o usuário confirmar
-    document.getElementById('transaction-form').submit();
-});
-
-

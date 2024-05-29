@@ -2,8 +2,6 @@ const myModal = new bootstrap.Modal("#register-modal");
 let logged = sessionStorage.getItem("logged");
 const session = sessionStorage.getItem("session");
 
-
-
 document.getElementById("login-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -26,9 +24,6 @@ document.getElementById("login-form").addEventListener("submit", function(e) {
     window.location.href = "home.html";
 });
 
-  
-
-
 document.getElementById("create-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -50,20 +45,6 @@ document.getElementById("create-form").addEventListener("submit", function(e) {
         password: password,
         transactions: []
     });
-    function checkLogged() {
-        if (session) {
-            sessionStorage.setItem("logged", session);
-            logged = session;
-    
-        }
-        if (logged) {
-            saveSession(logged, true); // Salvando a sessão atual como verdadeira
-            window.location.href = "home.html";
-        }
-    }
-    checkLogged();
-    
-    
 
     myModal.hide();
     alert("Conta criada com sucesso!");
@@ -83,19 +64,34 @@ function getAccount(key) {
     const account = localStorage.getItem(key);
     return account ? JSON.parse(account) : null;
 }
-function saveSession(data, saveSession){
-    if(saveSession){
+
+function saveSession(data, saveSession) {
+    if (saveSession) {
         localStorage.setItem("session", data);
     }
     sessionStorage.setItem("logged", data);
 }
-
 
 function hashPassword(password) {
     // Esta função é uma simulação e não deve ser usada em produção
     // Use bibliotecas de hashing de senha adequadas (por exemplo, bcrypt)
     return password;
 }
+
+function checkLogged() {
+    if (session) {
+        sessionStorage.setItem("logged", session);
+        logged = session;
+        saveSession(logged, true); // Adicionado o segundo argumento true
+    }
+    if (logged) {
+        window.location.href = "home.html";
+    }
+}
+
+
+checkLogged(); // Movido aqui para fora do evento de submissão do formulário
+
 document.getElementById('create-form').addEventListener('submit', function(event) {
     var password = document.getElementById('password-create-input').value;
     var confirmPassword = document.getElementById('password-confirm-input').value;
