@@ -98,14 +98,22 @@ header{
 }
 
 .alert-saldo-negativo {
+  
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-    background-color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000; 
+    background-color: rgba(255, 0, 0, 0.9); /* Fundo vermelho com um pouco de transparência */
     color: white;
-    border: none;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
+
+
 
 .alert-saldo-negativo .btn {
     background-color: blue;
