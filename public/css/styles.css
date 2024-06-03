@@ -100,11 +100,16 @@ header{
 .alert-saldo-negativo {
   
     position: fixed;
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2000; 
     background-color: rgba(255, 0, 0, 0.9); /* Fundo vermelho com um pouco de transparência */
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    background-color: black;
     color: white;
     padding: 20px;
     border-radius: 5px;
