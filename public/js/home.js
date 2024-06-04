@@ -6,6 +6,8 @@ let data = {
     transactions: []
 };
 
+let pendingTransaction = null; // Variável global para armazenar a transação pendente
+
 document.getElementById("button-logout").addEventListener("click", logout);
 document.getElementById("transactions-button").addEventListener("click", function(){
     window.location.href = "transactions.html";
@@ -23,14 +25,11 @@ document.getElementById("transaction-form").addEventListener("submit", function(
 
     if (type === "2" && value > saldoAtual) {
         document.querySelector('.alert-saldo-negativo').style.display = 'block';
+        pendingTransaction = { value, type, description, date }; // Armazena a transação pendente
         return;
     }
 
-    data.transactions.unshift({
-        value: value, type: type, description: description, date: date
-    });
-
-    saveData(data);
+    addTransaction({ value, type, description, date });
     e.target.reset();
     alert("Lançamento adicionado com sucesso.");
     myModal.hide();
@@ -42,6 +41,13 @@ document.getElementById("transaction-form").addEventListener("submit", function(
 
 document.getElementById("confirmar-saldo-negativo").addEventListener("click", function() {
     document.querySelector('.alert-saldo-negativo').style.display = 'none';
+    if (pendingTransaction) {
+        addTransaction(pendingTransaction); // Processa a transação pendente
+        pendingTransaction = null; // Reseta a transação pendente
+    }
+    getCashIn();
+    getCashOut();
+    getTotal();
 });
 
 checkLogged();
@@ -171,4 +177,9 @@ function getCurrentBalance() {
 
 function saveData(data) {
     localStorage.setItem(logged, JSON.stringify(data));
+}
+
+function addTransaction(transaction) {
+    data.transactions.unshift(transaction);
+    saveData(data);
 }

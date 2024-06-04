@@ -29,6 +29,8 @@ document.getElementById("create-form").addEventListener("submit", function(e) {
 
     const email = document.getElementById("email-create-input").value;
     const password = document.getElementById("password-create-input").value;
+    const confirmPassword = document.getElementById("password-confirm-input").value;
+
 
     if (email.length < 5) {
         alert("Preencha o campo com seu email válido");
@@ -37,6 +39,13 @@ document.getElementById("create-form").addEventListener("submit", function(e) {
 
     if (password.length < 4) {
         alert("Preencha o campo com no mínimo 4 dígitos.");
+        return;
+    }
+
+    if(password !== confirmPassword){
+        alert(
+            " Favor verifique as senhas"
+        )
         return;
     }
 
